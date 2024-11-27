@@ -1,5 +1,5 @@
 
-# Function-Based Logistic Regression Adjustment Framework
+# Surrogate Assisted Coefficients Updating in Logistic Regression considering Partially Missing Covariates
 
 This repository provides an implementation of a framework for correcting logistic regression coefficients in the presence of missing covariates. The core implementation is encapsulated in the `function_oh` script, which allows users to apply one of six adjustment methods to their dataset.
 
