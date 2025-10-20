@@ -49,7 +49,7 @@ The methods included address scenarios where logistic regression suffers from bi
    - Starts with a reduced logistic model that omits missing covariates.
    - Corrects the coefficients using an adjustment term derived from the main dataset, assuming a large sample size and full column rank of the design matrix.
 
-6. **New Method**:
+6. **SCU(Surrogate-calibrated Upating) Method**:
    - Combines the calibration and updating methods.
    - Utilizes the robustness of the updating method and the surrogate relationships from the calibration method to achieve more accurate and reliable estimations.
 
