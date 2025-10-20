@@ -1,5 +1,5 @@
 
-# Surrogate Assisted Coefficients Updating in Logistic Regression considering Partially Missing Covariates
+# A Surrogate-calibrated Updating Method for Logistic Regression with Missing Covariates
 ![R Programming](https://img.shields.io/badge/R%20Programming-4.0.0%2B-blue)
 ![Logistic Regression](https://img.shields.io/badge/Logistic%20Regression-Coefficient%20Correction-green)
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
