@@ -461,8 +461,8 @@ get_updating = function(X1_m, X2_m, D_m, X1_v, D_v){
   return(df)
 }
 
-# New method which adopts calibration model on updating method
-get_new = function(X1_m, X2_m, Z_m, D_m, X1_v, Z_v, D_v){
+# SCU method which adopts calibration model on updating method
+get_SCU = function(X1_m, X2_m, Z_m, D_m, X1_v, Z_v, D_v){
   
   z_alpha = qnorm(0.975)
   
@@ -683,16 +683,16 @@ function_oh = function(X1, X2, Z, D, method){
     
     return(df_updating)
   }
-  else if (method=="new"){
+  else if (method=="SCU"){
     
     z_alpha = qnorm(0.975)
     
-    result_new = get_new(X1_m, X2_m, Z_m, D_m, X1_v, Z_v, D_v)
+    result_SCU = get_SCU(X1_m, X2_m, Z_m, D_m, X1_v, Z_v, D_v)
     
-    est_new = result_new
+    est_SCU = result_SCU
     
-    beta1_new = result_new[1:d]
-    beta2_new = result_new[(1+d):(d+d2)]
+    beta1_SCU = result_SCU[1:d]
+    beta2_SCU = result_SCU[(1+d):(d+d2)]
     
     jack_knife1 = matrix(rep(0, length(D)*d), ncol= d)
     jack_knife2 = matrix(rep(0, length(D)*d2), ncol= d2)
@@ -700,7 +700,7 @@ function_oh = function(X1, X2, Z, D, method){
     pb = txtProgressBar(min = 0, max = dim(X1)[1], style = 3)
     
     for (k in 1:dim(X1_m)[1]){
-      result_jack = get_new(X1_m[-k,], X2_m[-k,], as.matrix(Z_m[-k,]), D_m[-k], 
+      result_jack = get_SCU(X1_m[-k,], X2_m[-k,], as.matrix(Z_m[-k,]), D_m[-k], 
                             X1_v, Z_v, D_v)
       
       jack_knife1[k,] = result_jack[1:d]
@@ -709,7 +709,7 @@ function_oh = function(X1, X2, Z, D, method){
     }
     
     for (l in 1:dim(X1_v)[1]){
-      result_jack = get_new(X1_m, X2_m, Z_m, D_m, 
+      result_jack = get_SCU(X1_m, X2_m, Z_m, D_m, 
                             X1_v[-l,], as.matrix(Z_v[-l,]), D_v[-l])
       jack_knife1[l+dim(X1_m)[1],] = result_jack[1:d]
       jack_knife2[l+dim(X1_m)[1],] = result_jack[(1+d):(d+d2)]
@@ -718,7 +718,7 @@ function_oh = function(X1, X2, Z, D, method){
     
     # trim_ratio <- 0.05
     # 
-    # var_beta1_new <- apply(jack_knife1, 2, function(x) {
+    # var_beta1_SCU <- apply(jack_knife1, 2, function(x) {
     #   # 상하위 trim_ratio 비율로 trimming
     #   trimmed_x <- sort(x)[(ceiling(length(x)*trim_ratio) + 1):(floor(length(x)*(1 - trim_ratio)))]
     #   # trimmed 데이터로 분산 계산
@@ -726,49 +726,49 @@ function_oh = function(X1, X2, Z, D, method){
     # })
     # 
     # # jackknife2에 대해 trimmed standard deviation을 계산
-    # var_beta2_new <- apply(jack_knife2, 2, function(x) {
+    # var_beta2_SCU <- apply(jack_knife2, 2, function(x) {
     #   # 상하위 trim_ratio 비율로 trimming
     #   trimmed_x <- sort(x)[(ceiling(length(x)*trim_ratio) + 1):(floor(length(x)*(1 - trim_ratio)))]
     #   # trimmed 데이터로 분산 계산
     #   return(var(trimmed_x) * (length(trimmed_x) - 1)^2 / length(trimmed_x))
     # })
     
-    var_beta1_new = apply(jack_knife1, 2, var)*(dim(jack_knife1)[1]-1)^2/dim(jack_knife1)[1]
-    var_beta2_new = apply(jack_knife2, 2, var)*(dim(jack_knife2)[1]-1)^2/dim(jack_knife2)[1]
+    var_beta1_SCU = apply(jack_knife1, 2, var)*(dim(jack_knife1)[1]-1)^2/dim(jack_knife1)[1]
+    var_beta2_SCU = apply(jack_knife2, 2, var)*(dim(jack_knife2)[1]-1)^2/dim(jack_knife2)[1]
     
     
     
-    sd_new = c(sqrt(var_beta1_new), sqrt(var_beta2_new))
+    sd_SCU = c(sqrt(var_beta1_SCU), sqrt(var_beta2_SCU))
     
-    pval_new = c()
-    or_new = c()
-    ciL_new = c()
-    ciU_new = c()
+    pval_SCU = c()
+    or_SCU = c()
+    ciL_SCU = c()
+    ciU_SCU = c()
     
     for(i in 1:d){
-      pval_new = c(pval_new, 2*min(pnorm(beta1_new[i], 0, sqrt(var_beta1_new[i])),
-                                   1-pnorm(beta1_new[i], 0, sqrt(var_beta1_new[i]))))
-      or_new = c(or_new, exp(beta1_new[i]))
-      ciL_new = c(ciL_new, exp(beta1_new[i]-z_alpha*sqrt(var_beta1_new[i])))
-      ciU_new = c(ciU_new, exp(beta1_new[i]+z_alpha*sqrt(var_beta1_new[i])))
+      pval_SCU = c(pval_SCU, 2*min(pnorm(beta1_SCU[i], 0, sqrt(var_beta1_SCU[i])),
+                                   1-pnorm(beta1_SCU[i], 0, sqrt(var_beta1_SCU[i]))))
+      or_SCU = c(or_SCU, exp(beta1_SCU[i]))
+      ciL_SCU = c(ciL_SCU, exp(beta1_SCU[i]-z_alpha*sqrt(var_beta1_SCU[i])))
+      ciU_SCU = c(ciU_SCU, exp(beta1_SCU[i]+z_alpha*sqrt(var_beta1_SCU[i])))
     }
     
     for(j in 1:d2){
-      pval_new = c(pval_new, 2*min(pnorm(beta2_new[j], 0, sqrt(var_beta2_new[j])),
-                                   1-pnorm(beta2_new[j], 0, sqrt(var_beta2_new[j]))))
-      or_new = c(or_new, exp(beta2_new[j]))
-      ciL_new = c(ciL_new, exp(beta2_new[j]-z_alpha*sqrt(var_beta2_new[j])))
-      ciU_new = c(ciU_new, exp(beta2_new[j]+z_alpha*sqrt(var_beta2_new[j])))
+      pval_SCU = c(pval_SCU, 2*min(pnorm(beta2_SCU[j], 0, sqrt(var_beta2_SCU[j])),
+                                   1-pnorm(beta2_SCU[j], 0, sqrt(var_beta2_SCU[j]))))
+      or_SCU = c(or_SCU, exp(beta2_SCU[j]))
+      ciL_SCU = c(ciL_SCU, exp(beta2_SCU[j]-z_alpha*sqrt(var_beta2_SCU[j])))
+      ciU_SCU = c(ciU_SCU, exp(beta2_SCU[j]+z_alpha*sqrt(var_beta2_SCU[j])))
     }
     
     
-    df_new = data.frame(est = est_new, sd = sd_new, 
-                        pval = pval_new, or = or_new, 
-                        ciL = ciL_new, ciU = ciU_new)
-    rownames(df_new) = covname
+    df_SCU = data.frame(est = est_SCU, sd = sd_SCU, 
+                        pval = pval_SCU, or = or_SCU, 
+                        ciL = ciL_SCU, ciU = ciU_SCU)
+    rownames(df_SCU) = covname
     close(pb)
     
-    return(df_new)
+    return(df_SCU)
   }
   else{
     print("Error : wrong method")
