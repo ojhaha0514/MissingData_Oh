@@ -7,11 +7,20 @@
 
 This repository provides an implementation of a framework for correcting logistic regression coefficients in the presence of missing covariates. The core implementation is encapsulated in the `function_oh` script, which allows users to apply one of six adjustment methods to their dataset.
 
+This repository accompanies the paper:
+
+**A Surrogate-Calibrated Updating Method for Logistic Regression with Missing Covariates**
+
 ## Overview
 
-The methods included address scenarios where logistic regression suffers from biases due to missing covariates. Key features include:
-- **Six Correction Methods**: Options for various data setups and biases.
-- **Framingham Data Example**: Demonstrates the methods using the well-documented Framingham Heart Study dataset.
+In logistic regression, coefficient estimates can be biased when some covariates are missing for part of the sample. This project implements several correction methods for this setting, including the proposed **SCU** method, which combines calibration and updating to improve estimation.
+
+The code is designed for settings with:
+
+- **`X1`**: fully observed covariates
+- **`X2`**: partially missing covariates
+- **`Z`**: surrogate covariates related to `X2`
+- **`D`**: binary outcome
 
 ## Files in the Repository
 
@@ -19,13 +28,30 @@ The methods included address scenarios where logistic regression suffers from bi
 - **`framingham_data_example.csv`**: Example dataset derived from the Framingham Heart Study.
 - **`framingham_data_explanation.pdf`**: Detailed documentation about the Framingham dataset.
 
-## Prerequisites
+## Requirements
 
-- **R Version**: 4.0.0 or later
-- Required R packages:
-  - `tidyverse`
-  - `dplyr`
-  - `ggplot2`
+- **R version**: 4.0.0 or later
+
+Required packages:
+
+- `dplyr`
+- `tidyr`
+- `MASS`
+- `ggplot2`
+- `forcats`
+- `reshape2`
+- `Matrix`
+- `Rcpp`
+- `RcppArmadillo`
+
+Install missing packages with:
+
+```R
+install.packages(c(
+  "dplyr", "tidyr", "MASS", "ggplot2",
+  "forcats", "reshape2", "Matrix", "Rcpp", "RcppArmadillo"
+))
+```
 
 ## The Six Methods
 
@@ -57,7 +83,7 @@ The methods included address scenarios where logistic regression suffers from bi
 ## Usage
 
 1. **Setup**:
-   - Place `function_oh.R` and `framingham_data_example.csv` in the working directory.
+   - Place function_oh.R in your working directory and prepare the input objects X1, X2, Z, and D.
 
 2. **Load the Function**:
    ```R
@@ -67,9 +93,29 @@ The methods included address scenarios where logistic regression suffers from bi
 3. **Apply a Correction Method**:
    - Example: Run method 1 on the Framingham dataset.
    ```R
-   result <- function_oh(data = "framingham_data_example.csv", method)
-   print(result)
+    result <- function_oh(
+      X1 = X1,
+      X2 = X2,
+      Z  = Z,
+      D  = D,
+      method = "new"
+    )
+    
+    print(result)
    ```
+---
+
+## Output
+
+The function returns a data frame containing inferential results for each coefficient, including:
+
+- estimate
+- standard error
+- p-value
+- odds ratio
+- confidence interval
+
+---
 
 ## Framingham Data
 
@@ -88,6 +134,11 @@ For more information, see the included `framingham_data_explanation.pdf`.
 
 ---
 
+## Citation
+
+Oh J, Shin YE. A Surrogate-Calibrated Updating Method for Logistic Regression With Missing Covariates. Stat Med. 2026 Mar;45(6-7):e70489. doi: 10.1002/sim.70489. PMID: 41830128; PMCID: PMC12988319.
+
+---
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.
