@@ -1,4 +1,22 @@
 
-tidyverse==1.3.1
-dplyr==1.0.7
-ggplot2==3.3.5
+- **R version**: 4.0.0 or later
+
+Required packages:
+
+- `dplyr`
+- `tidyr`
+- `MASS`
+- `ggplot2`
+- `forcats`
+- `reshape2`
+- `Matrix`
+- `Rcpp`
+- `RcppArmadillo`
+
+Install missing packages with:
+
+```r
+install.packages(c(
+  "dplyr", "tidyr", "MASS", "ggplot2",
+  "forcats", "reshape2", "Matrix", "Rcpp", "RcppArmadillo"
+))
