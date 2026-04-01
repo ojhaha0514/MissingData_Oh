@@ -91,7 +91,8 @@ install.packages(c(
    ```
 
 3. **Apply a Correction Method**:
-   - Example: Run method 1 on the Framingham dataset.
+   - Example: Run SCU method on the Framingham dataset.
+     
    ```R
     result <- function_oh(
       X1 = X1,
