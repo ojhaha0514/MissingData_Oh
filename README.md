@@ -137,7 +137,7 @@ For more information, see the included `framingham_data_explanation.pdf`.
 
 ## Citation
 
-Oh J, Shin YE. A Surrogate-Calibrated Updating Method for Logistic Regression With Missing Covariates. Stat Med. 2026 Mar;45(6-7):e70489. doi: 10.1002/sim.70489. PMID: 41830128; PMCID: PMC12988319.
+Oh J, Shin YE. A Surrogate-Calibrated Updating Method for Logistic Regression With Missing Covariates. Stat Med. 2026 Mar;45(6-7):e70489. [https://doi.org/10.1002/sim.70489](doi: 10.1002/sim.70489). PMID: 41830128; PMCID: PMC12988319.
 
 ---
 ## License
